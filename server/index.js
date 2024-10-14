@@ -44,13 +44,13 @@ app.post("/api/login", async (req, res, next) => {
         const user = req.body;
         const userExists = await Users.selectByUsername(user);
         if (userExists.length === 0) {
-            return res.status(400).json({ code: 400, message: 'username' });
+            return res.status(200).json({ code: 200, message: 'username' });
         }
         const userLogin = await Users.loginByUsernameAndPwd(user);
         if (userLogin.length > 0) {
             return res.status(200).json({ code: 200, data: userLogin });
         } else {
-            return res.status(400).json({ code: 400, message: 'password' });
+            return res.status(200).json({ code: 200, message: 'password' });
         }
     } catch (error) {
         console.error('Login error:', error);
