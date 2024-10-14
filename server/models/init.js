@@ -19,6 +19,5 @@ mongoose.connect(uri)
 // db.once('open', function() {
 //   // we're connected!
 //   console.log("connect");
-
 // });
 module.exports = mongoose;
