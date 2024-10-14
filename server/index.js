@@ -38,24 +38,25 @@ app.use(express.urlencoded({ extended: true }))
 app.use(cors())
 
 app.use("/api/users", UserController)
-app.post("/api/login", asyncHeadle(async (req, res) => {
+app.post("/api/login", async (req, res, next) => {
     // return await Users.loginByUsernameAndPwd(req.body);
-    const { username, password } = req.body;  
-    const uname =  new RegExp(username, 'i');
-    const userExists = await Users.selectByUsername({ uname });  
-  
-    if (userExists.length === 0) {  
-        return res.status(400).json({ code: 400, message: "username" });  
-    }  
-  
-    const loginResult = await Users.loginByUsernameAndPwd({ uname, password });  
-  
-    if (loginResult.length > 0) {  
-        return res.status(200).json({ code: 200, message: "successful", data: loginResult[0] });  
-    } else {  
-        return res.status(400).json({ code: 400, message: "password" });  
-    }  
-}))
+    try {
+        const user = req.body;
+        const userExists = await Users.selectByUsername(user);
+        if (userExists.length === 0) {
+            return res.status(400).json({ code: 400, message: 'username' });
+        }
+        const userLogin = await Users.loginByUsernameAndPwd(user);
+        if (userLogin.length > 0) {
+            return res.status(200).json({ code: 200, data: userLogin });
+        } else {
+            return res.status(400).json({ code: 400, message: 'password' });
+        }
+    } catch (error) {
+        console.error('Login error:', error);
+        return res.status(500).json({ code: 500, message: 'Internal server error' });
+    }
+})
 
 app.use("/api/pages", PageController)
 app.get("/api/pagesDict", asyncHeadle(async (req, res, next) => {
