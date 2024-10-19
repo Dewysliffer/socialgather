@@ -13,8 +13,9 @@ mongoose.connect(uri)
   .catch(err => {
     console.error('MongoDB connection error:', err);
   });
-// mongoose.connect('mongodb://localhost:27017/app');
 
+// mongoose.connect('mongodb://localhost:27017/app');
+// var db = mongoose.connection;
 // db.on('error', console.error.bind(console, 'connection error:'));
 // db.once('open', function() {
 //   // we're connected!
